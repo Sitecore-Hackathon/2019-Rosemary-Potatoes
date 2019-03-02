@@ -331,3 +331,6 @@ ASALocalRun/
 /lib/UniversalTracker/readme.md
 /lib/UniversalTracker/deployAllAzure.ps1
 /lib/UniversalTracker/Universal-Less.ps1.bak
+/lib/UniversalTracker/log_collection.txt
+/lib/UniversalTracker/log_processing.txt
+/lib/UniversalTracker/log_utinstall.txt

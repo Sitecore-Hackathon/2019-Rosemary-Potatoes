@@ -553,7 +553,7 @@ function CleanUp {
         Remove-Item
 
     Get-ChildItem -Path "$RepoPath\" -Directory -Recurse |
-        Where-Object { $_.Name -ne "Universal-Less.ps1" -and $_.Name -ne "Sitecore Universal Tracker 1.0.0.zip" } |
+        Where-Object { $_.Name -ne "Universal-Less.ps1" -and $_.Name -ne "Universal-Less-Uninstall.ps1" -and $_.Name -ne "Sitecore Universal Tracker 1.0.0.zip" } |
         Remove-Item -Recurse
 }
 
