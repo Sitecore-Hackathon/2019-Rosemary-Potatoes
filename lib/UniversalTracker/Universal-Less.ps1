@@ -203,7 +203,8 @@ function Show-Dialog {
                 -LicensePath $txtLicenseFolderPath.Text `
                 -RootSitePath $txtSiteFolderPath.Text `
                 -RepoPath $PSScriptRoot `
-                -Prefix $txtPrefix.text
+                -Prefix $txtPrefix.text `
+                -xconnectInstance $xconnectInstance.Text
         })
 
     
@@ -236,8 +237,10 @@ function Install-UniversalTracker {
         [string]$RepoPath,
 
         [Parameter(Mandatory = $true)]
-        [string]$Prefix
+        [string]$Prefix,
         
+        [Parameter(Mandatory = $true)]
+        [string]$xconnectInstance
     )
 
     # Unzip files from main package
