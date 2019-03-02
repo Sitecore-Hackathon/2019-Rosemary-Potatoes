@@ -356,8 +356,12 @@ function Install-UniversalTrackerDb {
     #Invoke-Command -program $sqlDeployPath -argumentString $sqlDeployArgumentList -waitForExit
     
     #TODO: Figure out how to call the sqlDeployPath script and wait for it to complete.
-    Invoke-Expression "& `"$sqlDeployPath`" $sqlDeployArgumentList" | Out-Null
+    #Invoke-Expression "& `"$sqlDeployPath`" $sqlDeployArgumentList" | Out-Null
+    $psCmd = "write-host (Get-Location).Path; & `"$sqlDeployPath`" $sqlDeployArgumentList ; sleep 3"
+    $expression = "cmd /c start powershell -Command { $psCmd } "
 
+    $utInstallResult = Invoke-Expression $expression
+    $utInstallResult | Out-File "$PSScriptRoot\log_utinstall.txt"
 
     #Add the binding for your service in the %windir%\System32\drivers\etc\hosts file.
 
@@ -387,7 +391,10 @@ function Install-Service {
         [string]$Prefix,
 
         [Parameter(Mandatory = $true)]
-        [string]$AppName
+        [string]$AppName,
+
+        [Parameter(Mandatory = $true)]
+        [string]$LogName
     )
 
     # Run onPremDeploy
@@ -395,16 +402,20 @@ function Install-Service {
     $installArgs += ("-wdpPackagePath", "$WdpPackagePath")
     $installArgs += ("-databaseConnectionString", "`"$DatabaseConnectionString`"")      
     $installArgs += ("-licenseXmlPath", "$LicenseXmlPath\license.xml")
-    $installArgs += ("-siteFolderPath", "$SiteFolderPath")
+    $installArgs += ("-siteFolderPath", "`"$SiteFolderPath`"")
     $installArgs += ("-siteHttpPort", "80")
     $installArgs += ("-instanceName", "$Prefix.Tracking.$AppName.Service")
     $installArgs += ("-iisAppPollName", "$Prefix.Tracking.$AppName.Service")
   
     Write-Host "`"$DeployScriptPath`" $installArgs"  $DeployScriptPath -ForegroundColor Gray
+    #Invoke-Expression "& `"$DeployScriptPath`" $installArgs" | Out-Null
+    #Start-Sleep -Seconds 60
 
-    #Invoke-Command -program $DeployScriptPath -argumentString $installArgs -waitForExit
-    #TODO: Figure out how to call the sqlDeployPath script and wait for it to complete.
-    Invoke-Expression "& `"$DeployScriptPath`" $installArgs" | Out-Null
+    $psCmd = "write-host (Get-Location).Path; & `"$DeployScriptPath`" $installArgs ; sleep 3"
+    $expression = "cmd /c start powershell -Command { $psCmd } " 
+
+    $serviceInstallResult = Invoke-Expression $expression 
+    $serviceInstallResult | Out-File "$PSScriptRoot\$LogName.txt"
 }
 
 function CleanUp {  
@@ -416,7 +427,7 @@ function CleanUp {
         
     )  
     Get-ChildItem -Path "$RepoPath\" -File -Recurse |
-    Where-Object { $_.Name -ne "Universal-Less.ps1" -and $_.Name -ne "Sitecore Universal Tracker 1.0.0.zip" } |
+    Where-Object { $_.Name -ne "Universal-Less.ps1" -and $_.Name -ne "Sitecore Universal Tracker 1.0.0.zip" -and $_.Name -ne "log_utinstall.txt" -and $_.Name -ne "log_collection.txt" -and $_.Name -ne "log_processing.txt"  } |
     Remove-Item
 
     Get-ChildItem -Path "$RepoPath\" -Directory -Recurse |
