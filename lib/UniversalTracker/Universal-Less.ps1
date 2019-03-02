@@ -204,7 +204,7 @@ function Show-Dialog {
                 -RootSitePath $txtSiteFolderPath.Text `
                 -RepoPath $PSScriptRoot `
                 -Prefix $txtPrefix.text `
-                -xconnectInstance $xconnectInstance.Text
+                -xconnectInstance $txtXconnectInstanceName.Text
         })
 
     
@@ -463,7 +463,7 @@ function UpdateTrackingServiceConfigs {
     $xml.Save("C:\inetpub\wwwroot\$($Prefix).tracking.processing.service\sitecore\Sitecore.Tracking.Processing.Engine\Config\config.xml")
 
     # Recycle the app pool 
-    Restart-WebAppPool "$Prefix.tracking.processing.service"
+    Restart-WebAppPool "$($Prefix).tracking.processing.service"
 }
 
 <# Function to open the status page after automated process is complete  #>
@@ -552,11 +552,11 @@ function CleanUp {
     )
 
     Get-ChildItem -Path "$RepoPath\" -File -Recurse |
-        Where-Object { $_.Name -ne "Universal-Less.ps1" -and $_.Name -ne "Sitecore Universal Tracker 1.0.0.zip" -and $_.Name -ne "log_utinstall.txt" -and $_.Name -ne "log_collection.txt" -and $_.Name -ne "log_processing.txt"  } |
+        Where-Object { $_.Name -ne "Universal-Less.ps1" -and $_.Name -ne "Universal-Less-Uninstall.ps1" -and $_.Name -ne "Sitecore Universal Tracker 1.0.0.zip" -and $_.Name -ne "log_utinstall.txt" -and $_.Name -ne "log_collection.txt" -and $_.Name -ne "log_processing.txt"  } |
         Remove-Item
 
     Get-ChildItem -Path "$RepoPath\" -Directory -Recurse |
-        Where-Object { $_.Name -ne "Universal-Less.ps1" -and $_.Name -ne "Universal-Less-Uninstall.ps1" -and $_.Name -ne "Sitecore Universal Tracker 1.0.0.zip" } |
+        Where-Object { $_.Name -ne "Universal-Less.ps1" -and $_.Name -ne "Sitecore Universal Tracker 1.0.0.zip" } |
         Remove-Item -Recurse
 }
 
