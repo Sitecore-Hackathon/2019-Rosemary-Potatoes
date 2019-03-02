@@ -38,7 +38,7 @@ Grab the "Universal-Less.ps1" script from the ***[LOCATION FROM ABOVE]*** and pl
 
 Open an administrator Powershell terminal in that folder, and execute the "Universal-Less.ps1" script. You'll see a Universal-Less window appear:
 
-[the UI](/docs/images/universal-less-ui.jpg "The UI")
+[the UI](docs/images/universal-less-ui.jpg?raw=true "The UI")
 
 Fill in the fields:
 
@@ -65,4 +65,4 @@ We're Team Rosemary Potatoes: [Chet Potvin](https://twitter.com/ChetPotvin), [Ga
 
 Rightpoint is fielding two teams this year, and we brainstormed names together. We wanted something that recognized our company but was also more whimsical than "Rightpoint Team #1". After throwing out dozens of names that share the "R-P" initials, Ed said "Rosemary Potatoes" and the team loved it. 
 
-[Some actual rosemary potatoes](/docs/images/rosemary-potatoes.jpg "Some actual rosemary potatoes")
+[Some actual rosemary potatoes](docs/images/rosemary-potatoes.jpg?raw=true "Some actual rosemary potatoes")
