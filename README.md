@@ -57,9 +57,18 @@ Then click "Install Universal Tracker". The Powershell script will open other Po
 
 Azure is pretty sweet, [no doubt](https://www.youtube.com/watch?v=TR3Vdo5etCQ&t=30s), but sometimes you just want to spin up something immediately and locally without having to check to see if you have enough Azure credits to afford the necessary resources. And sometimes you'll be offline or [Azure South Central](https://www.theregister.co.uk/2018/09/17/azure_outage_report/) is blowing up again and you can't reach Azure. 
 
+## I am very interested. Where can I learn more?
+
+Check out our [documentation here](documentation) to learn more. 
+
 ## Sounds great! But who are you?
 
 We're Team Rosemary Potatoes: [Chet Potvin](https://twitter.com/ChetPotvin), [Gabe Streza](https://twitter.com/GabeStreza), and [Ed Schwehm](https://twitter.com/edgesmash), coming to you from [Rightpoint](https://www.rightpoint.com). 
+
+## Gee, I'd really like to actually see and hear from you.
+
+Well then, check out our YouTube video all about Universal-Less!
+[![Sitecore Hackathon Video Embedding Alt Text](https://img.youtube.com/vi/4VBWLeVsnBU/0.jpg)](https://www.youtube.com/watch?v=4VBWLeVsnBU)
 
 ## Why "Rosemary Potatoes"?
 
