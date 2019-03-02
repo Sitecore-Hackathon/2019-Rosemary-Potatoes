@@ -14,8 +14,77 @@
 
 .AUTHORS
     ~~ TEAM ROSEMARY POTATOES ~~
-    
+
+.PARAMETER dbName
+   IIS website binding for https port
+
+.PARAMETER dbUser
+   IIS website binding for https port
+
+.PARAMETER dbPassword
+   IIS website binding for https port
+
+.PARAMETER collectionServiceSiteName
+   IIS website binding for https port
+
+.PARAMETER collectionServiceAppPoolName
+   IIS website binding for https port
+   
+.PARAMETER collectionServicesiteFolderPath
+   IIS website binding for https port
+
+.PARAMETER processingServiceSiteName
+   IIS website binding for https port
+
+.PARAMETER processingServiceAppPoolName
+   IIS website binding for https port
+
+.PARAMETER processingServicesiteFolderPath
+   IIS website binding for https port
+
+.PARAMETER processingServiceName
+   IIS website binding for https port
+
+.PARAMETER collectionServiceCertificateSubjectName
+   IIS website binding for https port   
 #>
+param (
+    [Parameter(Mandatory = $True)]
+    [string]
+    $dbName,
+
+    [Parameter(Mandatory = $True)]
+    [string]
+    $dbUser,
+
+    [Parameter(Mandatory = $True)]
+    [string]
+    $dbPassword,
+
+    [string]
+    $collectionServiceSiteName = "Sitecore.Tracking.Collection.Service",
+
+    [string]
+    $collectionServiceAppPoolName = "Sitecore.Tracking.Collection.Service",
+
+    [string]
+    $collectionServicesiteFolderPath = "C:\inetpub\wwwroot",
+
+    [string]
+    $processingServiceSiteName = "Sitecore.Tracking.Processing.Service",
+
+    [string]
+    $processingServiceAppPoolName = "Sitecore.Tracking.Processing.Service",
+
+    [string]
+    $processingServicesiteFolderPath = "C:\inetpub\wwwroot",
+
+    [string]
+    $processingServiceName = "Sitecore Universal Tracker Processing Service",
+
+    [string]
+    $collectionServiceCertificateSubjectName
+)
 
 <#
 .SYNOPSIS
@@ -166,14 +235,97 @@ function Remove-HostsFileEntry(){
 .SYNOPSIS
     Remove a certificate from the local machine store
 
+.PARAMETER subjectName
+    Subject name of the certificate to remove.
+#>
+function Remove-CertificateBySubjectName(){
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$subjectName
+    )
+    Get-ChildItem Cert:\LocalMachine\My |
+        Where-Object { $_.Subject -match $subjectName } |
+        Remove-Item
+}
+
+<#
+.SYNOPSIS
+    Remove a certificate from the local machine store
+
 .PARAMETER thumbprint
     Thumbprint of the certificate to remove.
 #>
-function Remove-Certificate(){
+function Remove-CertificateByThumbprint(){
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
         [string]$thumbprint
     )
-    # TODO
+    Get-ChildItem Cert:\LocalMachine\My\$thumbprint | Remove-Item
+}
+
+# Remove items in reverse order of their being added:
+# - Processing Service
+#   - website and app pool
+#   - windows service
+#   - hosts file entry
+# - Collection Service
+#   - website and app pool
+#   - windows service
+# - SQL Database
+try 
+{
+    Write-Host "Removing the Processing Service..."
+
+    Write-Host "Removing the website..."
+    Remove-Website($processingServiceSiteName, $processingServiceAppPoolName)
+
+    Write-Host "Removing the windows service..."
+    Remove-Service($processingServiceName)
+
+    Write-Host "Removing the hosts file entry..."
+    Remove-HostsFileEntry($processingServiceSiteName)
+
+    Write-Host "Processing Service removed!"
+}
+catch {
+    Write-Error "Error removing Processing Service:" + $_.Exception.Message
+    Break
+}
+
+try {
+    Write-Host "Removing the Collection Service..."
+
+    Write-Host "Removing the website..."
+    Remove-Website($collectionServiceSiteName, $collectionServiceAppPoolName)
+
+    Write-Host "Removing the hosts file entry..."
+    Remove-HostsFileEntry($collectionServiceSiteName)
+
+    if (-not ([string]::IsNullOrEmpty($collectionServiceCertificateSubjectName)))
+    {
+        Write-Host "Removing the certificate..."
+        Remove-CertificateBySubjectName($collectionServiceCertificateSubjectName)
+    }
+    else {
+        Write-Host "No certificate subject specified, not attempting to remove certificate."
+    }
+
+    Write-Host "Collection Service removed!"
+}
+catch {
+    Write-Error "Error removing Collection Service:" + $_.Exception.Message
+    Break
+}
+
+try {
+    Write-Host "Removing the Universal Tracker Database..."
+    Remove-Database($dbName, $dbUser, $dbPassword)
+
+    Write-Host "Universal Tracker Database removed!"
+}
+catch {
+    Write-Error "Error removing Database:" + $_.Exception.Message
+    Break
 }
