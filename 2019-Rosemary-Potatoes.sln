@@ -37,7 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MultiSite", "MultiSite", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosemaryPotatoes.Foundation.MultiSite", "src\Foundation\MultiSite\code\RosemaryPotatoes.Foundation.MultiSite.csproj", "{B6A9E340-D741-446D-9513-95C3FB290B75}"
 EndProject
-Project("{CAA73BB0-EF22-4D79-A57E-DF67B3BA9C80}") = "RosemaryPotatoes.Foundation.MultiSite.TDS", "src\Foundation\MultiSite\RosemaryPotatoes.Foundation.MultiSite.TDS\RosemaryPotatoes.Foundation.MultiSite.TDS.scproj", "{14FB168B-03F2-4657-B10D-C14313D95A36}"
+Project("{CAA73BB0-EF22-4D79-A57E-DF67B3BA9C80}") = "RosemaryPotatoes.Foundation.MultiSite.TDS", "src\Foundation\MultiSite\serialization\RosemaryPotatoes.Foundation.MultiSite.TDS.scproj", "{14FB168B-03F2-4657-B10D-C14313D95A36}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UniversalTracker", "UniversalTracker", "{EC7056D3-3CCF-43E0-BDA6-8CC3276334B9}"
 	ProjectSection(SolutionItems) = preProject
