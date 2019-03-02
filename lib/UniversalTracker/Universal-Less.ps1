@@ -285,11 +285,11 @@ function Install-UniversalTracker {
         -AppName $AppName `
         -LogName "log_processing"
 
-     UpdateTrackingServiceConfigs -Prefix $Prefix -xconnectInstance $xconnectInstance
+    UpdateTrackingServiceConfigs -Prefix $Prefix -xconnectInstance $xconnectInstance
 
-     ApplyPermissionsToPrivateKey
+    ApplyPermissionsToPrivateKey
 
-     Open-StatusPages
+    Open-StatusPages
 }
 
 function Get-Folder($directory) {
@@ -485,14 +485,15 @@ function UpdateTrackingServiceConfigs {
     $xml = [xml](Get-Content $file)
     $xml.SelectNodes("//ServiceUrl") | % { 
         $_."#text" = $_."#text".Replace("xconnect.service", $xconnectInstance) 
-        }
+    }
 
     $xml.SelectNodes("//ClientCertificate") | % { 
         $_."#text" = $_."#text".Replace("StoreName=My;StoreLocation=CurrentUser;AllowInvalidClientCertificates=true;FindType=FindByThumbprint;FindValue=", "StoreName=My;StoreLocation=LocalMachine;AllowInvalidClientCertificates=true;FindType=FindBySubjectName;FindValue=$xconnectInstance") 
-        }
+    }
 
     $xml.Save("C:\inetpub\wwwroot\$($Prefix).tracking.processing.service\sitecore\Sitecore.Tracking.Processing.Engine\Config\config.xml")
 
+    Restart-WebAppPool "$Prefix.tracking.processing.service"
 }
 
 function Open-StatusPages {
@@ -511,6 +512,7 @@ function ApplyPermissionsToPrivateKey {
     Import-Module webadministration
 
     $certCN = $xconnectInstance
+
     Try {
         $WorkingCert = Get-ChildItem CERT:\LocalMachine\My |where {$_.Subject -match $certCN} | sort $_.NotAfter -Descending | select -first 1 -erroraction STOP
         $TPrint = $WorkingCert.Thumbprint
@@ -519,6 +521,7 @@ function ApplyPermissionsToPrivateKey {
     Catch {
         "Error: unable to locate certificate for $($CertCN)"
     }
+
     $keyPath = "C:\ProgramData\Microsoft\Crypto\RSA\MachineKeys\"
     $fullPath = $keyPath + $rsaFile
     $acl = Get-Acl -Path $fullPath
@@ -532,7 +535,6 @@ function ApplyPermissionsToPrivateKey {
     Catch {
         "Error: unable to set ACL on certificate"
     }
-
 }
 
 function Add-HostEntry {
@@ -567,10 +569,8 @@ function Add-HostEntry {
 function CleanUp {  
     [CmdletBinding()]
     param(
-
         [Parameter(Mandatory = $true)]
         [string]$RepoPath
-        
     )
 
     Get-ChildItem -Path "$RepoPath\" -File -Recurse |
