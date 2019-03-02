@@ -27,170 +27,162 @@ function Show-Dialog {
     Universal-Less
 #>
 
-Add-Type -AssemblyName System.Windows.Forms
-[System.Windows.Forms.Application]::EnableVisualStyles()
+    Add-Type -AssemblyName System.Windows.Forms
+    [System.Windows.Forms.Application]::EnableVisualStyles()
 
-$formUniversalLess               = New-Object system.Windows.Forms.Form
-$formUniversalLess.ClientSize    = '448,563'
-$formUniversalLess.text          = "Universal-Less"
-$formUniversalLess.TopMost       = $false
+    $formUniversalLess = New-Object system.Windows.Forms.Form
+    $formUniversalLess.ClientSize = '448,563'
+    $formUniversalLess.text = "Universal-Less"
+    $formUniversalLess.TopMost = $false
 
-$lblSqlName                      = New-Object system.Windows.Forms.Label
-$lblSqlName.text                 = "SQL Server Name"
-$lblSqlName.AutoSize             = $true
-$lblSqlName.width                = 25
-$lblSqlName.height               = 10
-$lblSqlName.location             = New-Object System.Drawing.Point(9,12)
-$lblSqlName.Font                 = 'Microsoft Sans Serif,10'
+    $lblSqlName = New-Object system.Windows.Forms.Label
+    $lblSqlName.text = "SQL Server Name"
+    $lblSqlName.AutoSize = $true
+    $lblSqlName.width = 25
+    $lblSqlName.height = 10
+    $lblSqlName.location = New-Object System.Drawing.Point(9, 12)
+    $lblSqlName.Font = 'Microsoft Sans Serif,10'
 
-$txtSqlServerName                = New-Object system.Windows.Forms.TextBox
-$txtSqlServerName.text           = ".\SQL2016"
-$txtSqlServerName.multiline      = $false
-$txtSqlServerName.width          = 410
-$txtSqlServerName.height         = 20
-$txtSqlServerName.location       = New-Object System.Drawing.Point(9,34)
-$txtSqlServerName.Font           = 'Microsoft Sans Serif,10'
+    $txtSqlServerName = New-Object system.Windows.Forms.TextBox
+    $txtSqlServerName.text = ".\SQL2016"
+    $txtSqlServerName.multiline = $false
+    $txtSqlServerName.width = 410
+    $txtSqlServerName.height = 20
+    $txtSqlServerName.location = New-Object System.Drawing.Point(9, 34)
+    $txtSqlServerName.Font = 'Microsoft Sans Serif,10'
 
-$txtSqlUser                      = New-Object system.Windows.Forms.TextBox
-$txtSqlUser.text                 = "sa"
-$txtSqlUser.multiline            = $false
-$txtSqlUser.width                = 410
-$txtSqlUser.height               = 20
-$txtSqlUser.location             = New-Object System.Drawing.Point(9,87)
-$txtSqlUser.Font                 = 'Microsoft Sans Serif,10'
+    $txtSqlUser = New-Object system.Windows.Forms.TextBox
+    $txtSqlUser.text = "sa"
+    $txtSqlUser.multiline = $false
+    $txtSqlUser.width = 410
+    $txtSqlUser.height = 20
+    $txtSqlUser.location = New-Object System.Drawing.Point(9, 87)
+    $txtSqlUser.Font = 'Microsoft Sans Serif,10'
 
-$lblSqlUserName                  = New-Object system.Windows.Forms.Label
-$lblSqlUserName.text             = "SQL User"
-$lblSqlUserName.AutoSize         = $true
-$lblSqlUserName.width            = 25
-$lblSqlUserName.height           = 10
-$lblSqlUserName.location         = New-Object System.Drawing.Point(9,65)
-$lblSqlUserName.Font             = 'Microsoft Sans Serif,10'
+    $lblSqlUserName = New-Object system.Windows.Forms.Label
+    $lblSqlUserName.text = "SQL User"
+    $lblSqlUserName.AutoSize = $true
+    $lblSqlUserName.width = 25
+    $lblSqlUserName.height = 10
+    $lblSqlUserName.location = New-Object System.Drawing.Point(9, 65)
+    $lblSqlUserName.Font = 'Microsoft Sans Serif,10'
 
-$txtSqlPassword                  = New-Object system.Windows.Forms.TextBox
-$txtSqlPassword.multiline        = $false
-$txtSqlPassword.width            = 410
-$txtSqlPassword.height           = 20
-$txtSqlPassword.location         = New-Object System.Drawing.Point(9,148)
-$txtSqlPassword.Font             = 'Microsoft Sans Serif,10'
+    $txtSqlPassword = New-Object system.Windows.Forms.TextBox
+    $txtSqlPassword.multiline = $false
+    $txtSqlPassword.width = 410
+    $txtSqlPassword.height = 20
+    $txtSqlPassword.location = New-Object System.Drawing.Point(9, 148)
+    $txtSqlPassword.Font = 'Microsoft Sans Serif,10'
 
-$lblSqlPassword                  = New-Object system.Windows.Forms.Label
-$lblSqlPassword.text             = "SQL Password"
-$lblSqlPassword.AutoSize         = $true
-$lblSqlPassword.width            = 25
-$lblSqlPassword.height           = 10
-$lblSqlPassword.location         = New-Object System.Drawing.Point(9,126)
-$lblSqlPassword.Font             = 'Microsoft Sans Serif,10'
+    $lblSqlPassword = New-Object system.Windows.Forms.Label
+    $lblSqlPassword.text = "SQL Password"
+    $lblSqlPassword.AutoSize = $true
+    $lblSqlPassword.width = 25
+    $lblSqlPassword.height = 10
+    $lblSqlPassword.location = New-Object System.Drawing.Point(9, 126)
+    $lblSqlPassword.Font = 'Microsoft Sans Serif,10'
 
-$txtDbName                       = New-Object system.Windows.Forms.TextBox
-$txtDbName.text                  = "_Tracking"
-$txtDbName.multiline             = $false
-$txtDbName.width                 = 410
-$txtDbName.height                = 20
-$txtDbName.location              = New-Object System.Drawing.Point(9,211)
-$txtDbName.Font                  = 'Microsoft Sans Serif,10'
+    $txtDbName = New-Object system.Windows.Forms.TextBox
+    $txtDbName.text = "_Tracking"
+    $txtDbName.multiline = $false
+    $txtDbName.width = 410
+    $txtDbName.height = 20
+    $txtDbName.location = New-Object System.Drawing.Point(9, 211)
+    $txtDbName.Font = 'Microsoft Sans Serif,10'
 
-$lblUnDbName                     = New-Object system.Windows.Forms.Label
-$lblUnDbName.text                = "Universal Tracker Database Name"
-$lblUnDbName.AutoSize            = $true
-$lblUnDbName.width               = 25
-$lblUnDbName.height              = 10
-$lblUnDbName.location            = New-Object System.Drawing.Point(9,189)
-$lblUnDbName.Font                = 'Microsoft Sans Serif,10'
+    $lblUnDbName = New-Object system.Windows.Forms.Label
+    $lblUnDbName.text = "Universal Tracker Database Name"
+    $lblUnDbName.AutoSize = $true
+    $lblUnDbName.width = 25
+    $lblUnDbName.height = 10
+    $lblUnDbName.location = New-Object System.Drawing.Point(9, 189)
+    $lblUnDbName.Font = 'Microsoft Sans Serif,10'
 
-$txtXconnectInstanceName         = New-Object system.Windows.Forms.TextBox
-$txtXconnectInstanceName.text    = "sitecore91.xconnect"
-$txtXconnectInstanceName.multiline  = $false
-$txtXconnectInstanceName.width   = 410
-$txtXconnectInstanceName.height  = 20
-$txtXconnectInstanceName.location  = New-Object System.Drawing.Point(9,280)
-$txtXconnectInstanceName.Font    = 'Microsoft Sans Serif,10'
+    $txtXconnectInstanceName = New-Object system.Windows.Forms.TextBox
+    $txtXconnectInstanceName.text = "sitecore91.xconnect"
+    $txtXconnectInstanceName.multiline = $false
+    $txtXconnectInstanceName.width = 410
+    $txtXconnectInstanceName.height = 20
+    $txtXconnectInstanceName.location = New-Object System.Drawing.Point(9, 280)
+    $txtXconnectInstanceName.Font = 'Microsoft Sans Serif,10'
 
-$lblxConnectInstanceName         = New-Object system.Windows.Forms.Label
-$lblxConnectInstanceName.text    = "xConnect Instance Name"
-$lblxConnectInstanceName.AutoSize  = $true
-$lblxConnectInstanceName.width   = 25
-$lblxConnectInstanceName.height  = 10
-$lblxConnectInstanceName.location  = New-Object System.Drawing.Point(9,258)
-$lblxConnectInstanceName.Font    = 'Microsoft Sans Serif,10'
+    $lblxConnectInstanceName = New-Object system.Windows.Forms.Label
+    $lblxConnectInstanceName.text = "xConnect Instance Name"
+    $lblxConnectInstanceName.AutoSize = $true
+    $lblxConnectInstanceName.width = 25
+    $lblxConnectInstanceName.height = 10
+    $lblxConnectInstanceName.location = New-Object System.Drawing.Point(9, 258)
+    $lblxConnectInstanceName.Font = 'Microsoft Sans Serif,10'
 
-$txtLicenseFolderPath            = New-Object system.Windows.Forms.TextBox
-$txtLicenseFolderPath.multiline  = $false
-$txtLicenseFolderPath.width      = 370
-$txtLicenseFolderPath.height     = 20
-$txtLicenseFolderPath.location   = New-Object System.Drawing.Point(9,396)
-$txtLicenseFolderPath.Font       = 'Microsoft Sans Serif,10'
+    $txtLicenseFolderPath = New-Object system.Windows.Forms.TextBox
+    $txtLicenseFolderPath.multiline = $false
+    $txtLicenseFolderPath.width = 370
+    $txtLicenseFolderPath.height = 20
+    $txtLicenseFolderPath.location = New-Object System.Drawing.Point(9, 396)
+    $txtLicenseFolderPath.Font = 'Microsoft Sans Serif,10'
 
-$lblLicenseFilePath              = New-Object system.Windows.Forms.Label
-$lblLicenseFilePath.text         = "License File Path"
-$lblLicenseFilePath.AutoSize     = $true
-$lblLicenseFilePath.width        = 25
-$lblLicenseFilePath.height       = 10
-$lblLicenseFilePath.location     = New-Object System.Drawing.Point(9,374)
-$lblLicenseFilePath.Font         = 'Microsoft Sans Serif,10'
+    $lblLicenseFilePath = New-Object system.Windows.Forms.Label
+    $lblLicenseFilePath.text = "License File Path"
+    $lblLicenseFilePath.AutoSize = $true
+    $lblLicenseFilePath.width = 25
+    $lblLicenseFilePath.height = 10
+    $lblLicenseFilePath.location = New-Object System.Drawing.Point(9, 374)
+    $lblLicenseFilePath.Font = 'Microsoft Sans Serif,10'
 
-$lblRootWebsitePath              = New-Object system.Windows.Forms.Label
-$lblRootWebsitePath.text         = "Root Websites Path "
-$lblRootWebsitePath.AutoSize     = $true
-$lblRootWebsitePath.width        = 25
-$lblRootWebsitePath.height       = 10
-$lblRootWebsitePath.location     = New-Object System.Drawing.Point(9,435)
-$lblRootWebsitePath.Font         = 'Microsoft Sans Serif,10'
+    $lblRootWebsitePath = New-Object system.Windows.Forms.Label
+    $lblRootWebsitePath.text = "Root Websites Path "
+    $lblRootWebsitePath.AutoSize = $true
+    $lblRootWebsitePath.width = 25
+    $lblRootWebsitePath.height = 10
+    $lblRootWebsitePath.location = New-Object System.Drawing.Point(9, 435)
+    $lblRootWebsitePath.Font = 'Microsoft Sans Serif,10'
 
-$txtSiteFolderPath               = New-Object system.Windows.Forms.TextBox
-$txtSiteFolderPath.multiline     = $false
-$txtSiteFolderPath.text          = "C:\inetpub\wwwroot"
-$txtSiteFolderPath.width         = 369
-$txtSiteFolderPath.height        = 20
-$txtSiteFolderPath.location      = New-Object System.Drawing.Point(8,457)
-$txtSiteFolderPath.Font          = 'Microsoft Sans Serif,10'
+    $txtSiteFolderPath = New-Object system.Windows.Forms.TextBox
+    $txtSiteFolderPath.multiline = $false
+    $txtSiteFolderPath.text = "C:\inetpub\wwwroot"
+    $txtSiteFolderPath.width = 369
+    $txtSiteFolderPath.height = 20
+    $txtSiteFolderPath.location = New-Object System.Drawing.Point(8, 457)
+    $txtSiteFolderPath.Font = 'Microsoft Sans Serif,10'
 
-$txtPrefix                       = New-Object system.Windows.Forms.TextBox
-$txtPrefix.multiline             = $false
-$txtPrefix.width                 = 410
-$txtPrefix.height                = 20
-$txtPrefix.location              = New-Object System.Drawing.Point(9,337)
-$txtPrefix.Font                  = 'Microsoft Sans Serif,10'
+    $txtPrefix = New-Object system.Windows.Forms.TextBox
+    $txtPrefix.multiline = $false
+    $txtPrefix.width = 410
+    $txtPrefix.height = 20
+    $txtPrefix.location = New-Object System.Drawing.Point(9, 337)
+    $txtPrefix.Font = 'Microsoft Sans Serif,10'
 
-$lblPrefix                       = New-Object system.Windows.Forms.Label
-$lblPrefix.text                  = "Prefix"
-$lblPrefix.AutoSize              = $true
-$lblPrefix.width                 = 25
-$lblPrefix.height                = 10
-$lblPrefix.location              = New-Object System.Drawing.Point(9,315)
-$lblPrefix.Font                  = 'Microsoft Sans Serif,10'
+    $lblPrefix = New-Object system.Windows.Forms.Label
+    $lblPrefix.text = "Prefix"
+    $lblPrefix.AutoSize = $true
+    $lblPrefix.width = 25
+    $lblPrefix.height = 10
+    $lblPrefix.location = New-Object System.Drawing.Point(9, 315)
+    $lblPrefix.Font = 'Microsoft Sans Serif,10'
 
-$btnLicenseBrowse                = New-Object system.Windows.Forms.Button
-$btnLicenseBrowse.text           = "..."
-$btnLicenseBrowse.width          = 43
-$btnLicenseBrowse.height         = 30
-$btnLicenseBrowse.location       = New-Object System.Drawing.Point(388,390)
-$btnLicenseBrowse.Font           = 'Microsoft Sans Serif,10'
+    $btnLicenseBrowse = New-Object system.Windows.Forms.Button
+    $btnLicenseBrowse.text = "..."
+    $btnLicenseBrowse.width = 43
+    $btnLicenseBrowse.height = 30
+    $btnLicenseBrowse.location = New-Object System.Drawing.Point(388, 390)
+    $btnLicenseBrowse.Font = 'Microsoft Sans Serif,10'
 
-$btnSitePathBrowse               = New-Object system.Windows.Forms.Button
-$btnSitePathBrowse.text          = "..."
-$btnSitePathBrowse.width         = 43
-$btnSitePathBrowse.height        = 30
-$btnSitePathBrowse.location      = New-Object System.Drawing.Point(388,449)
-$btnSitePathBrowse.Font          = 'Microsoft Sans Serif,10'
+    $btnSitePathBrowse = New-Object system.Windows.Forms.Button
+    $btnSitePathBrowse.text = "..."
+    $btnSitePathBrowse.width = 43
+    $btnSitePathBrowse.height = 30
+    $btnSitePathBrowse.location = New-Object System.Drawing.Point(388, 449)
+    $btnSitePathBrowse.Font = 'Microsoft Sans Serif,10'
 
-$btnInstall                      = New-Object system.Windows.Forms.Button
-$btnInstall.text                 = "Install Universal Tracker"
-$btnInstall.width                = 173
-$btnInstall.height               = 30
-$btnInstall.location             = New-Object System.Drawing.Point(258,514)
-$btnInstall.Font                 = 'Microsoft Sans Serif,10'
+    $btnInstall = New-Object system.Windows.Forms.Button
+    $btnInstall.text = "Install Universal Tracker"
+    $btnInstall.width = 173
+    $btnInstall.height = 30
+    $btnInstall.location = New-Object System.Drawing.Point(258, 514)
+    $btnInstall.Font = 'Microsoft Sans Serif,10'
 
-$formUniversalLess.controls.AddRange(@($lblSqlName,$txtSqlServerName,$txtSqlUser,$lblSqlUserName,$txtSqlPassword,$lblSqlPassword,$txtDbName,$lblUnDbName,$txtXconnectInstanceName,$lblxConnectInstanceName,$txtLicenseFolderPath,$lblLicenseFilePath,$lblRootWebsitePath,$txtSiteFolderPath,$txtPrefix,$lblPrefix,$btnLicenseBrowse,$btnSitePathBrowse,$btnInstall))
+    $formUniversalLess.controls.AddRange(@($lblSqlName, $txtSqlServerName, $txtSqlUser, $lblSqlUserName, $txtSqlPassword, $lblSqlPassword, $txtDbName, $lblUnDbName, $txtXconnectInstanceName, $lblxConnectInstanceName, $txtLicenseFolderPath, $lblLicenseFilePath, $lblRootWebsitePath, $txtSiteFolderPath, $txtPrefix, $lblPrefix, $btnLicenseBrowse, $btnSitePathBrowse, $btnInstall))
 
-    $btnCheck.Add_Click( { 
-            # TODO: Check if SQL data in form is valid.
-            # $isValidSqlConnection = Test-SqlConnection -ServerName $txtSqlServerName.text -UserName $txtSqlUser.text -Password $txtSqlPassword.text
-            # if($isValidSqlConnection){
-            #     Write-Host "SQL Connection is Valid!" -ForegroundColor Green
-            #     $btnInstall.Enabled = $true
-            # }
-        })
 
     $btnLicenseBrowse.Add_Click( { 
             $selectedLicenseFolder = Get-Folder
@@ -367,14 +359,16 @@ function Test-SqlConnection {
     $ErrorActionPreference = 'Stop'
 
     try {
-        $connectionString = 'Data Source={0}User ID={2};Password={3}' -f $ServerName,$UserName,$Password
+        $connectionString = 'Data Source={0}User ID={2};Password={3}' -f $ServerName, $UserName, $Password
         $sqlConnection = New-Object System.Data.SqlClient.SqlConnection $ConnectionString
         $sqlConnection.Open()
         ## This will run if the Open() method does not throw an exception
         $true
-    } catch {
+    }
+    catch {
         $false
-    } finally {
+    }
+    finally {
         ## Close the connection when we're done
         $sqlConnection.Close()
     }
@@ -554,7 +548,12 @@ else {
 
 
 # Update with xConnect URL in config
+# 2. Update the processing service configuration under inetpub\wwwroot\xxx.tracking.processing.service\sitecore\Sitecore.Tracking.Processing.Engine\Config\config.xml
 
+
+# 3. Change the Settings/XConnect/ServiceUrl node to the correct xConnect service path
+# 4. Replace the Settings/XConnect/ClientCertificate node text with StoreName=My;StoreLocation=LocalMachine;AllowInvalidClientCertificates=true;FindType=FindBySubjectName;FindValue=$xConnectHostName
+# 5. Update the xConnect private key permissions so that Network Service has read permissions
 
 
 # Get and update thumbprint 
