@@ -178,37 +178,93 @@ function Show-Dialog {
 
             # Close the dialog
             $formUniversalLess.Close();
-            
-            # Unizip files from download
-            UnzipUniveralTrackerFiles
-          
-            Write-Host "Installing Universal Tracker..." -ForegroundColor Green
-            # Install Universal Tracker
+
             Install-UniversalTracker -SqlServerName $txtSqlServerName.Text `
                 -SqlServerUser $txtSqlUser.Text `
                 -SqlServerPassword $txtSqlPassword.Text `
                 -SqlDbName $txtDbName.Text `
                 -LicensePath $txtLicenseFolderPath.Text `
-                -RootSitePath $txtSiteFolderPath.Text
-
-
-            $dbConnectionString = "user id=$($txtSqlUser.Text);password=$($txtSqlPassword.Text);data source=$($txtSqlServerName.Text);database=$($txtDbName.Text);ConnectRetryCount=5;ConnectRetryInterval=10;Connection Timeout=50;"
-
-            Write-Host "Installing Collection Service..." -ForegroundColor Green
-            # Install Collection Service
-            $collectionWdp = "$PSScriptRoot\Sitecore.Tracking.Collection.Service.1.0.0-r00045.wdp.zip"
-            $collectionDeploy = "$PSScriptRoot\Sitecore.Tracking.Collection.Service.1.0.0-r00045.deploy\OnPremDeploymentInfrastructure\onPremDeploy.ps1" 
-            Install-Service -DeployScriptPath $collectionDeploy -WdpPackagePath $collectionWdp -DatabaseConnectionString $dbConnectionString -LicenseXmlPath $txtLicenseFolderPath.Text -SiteFolderPath $txtSiteFolderPath.Text
-
-            Write-Host "Installing Processing Service..." -ForegroundColor Green
-            # Install Processing Service
-            $processingWdp = "$PSScriptRoot\Sitecore.Tracking.Processing.Service.1.0.0-r00070.wdp.zip"
-            $processingDeploy = "$PSScriptRoot\Sitecore.Tracking.Processing.Service.1.0.0-r00070.deploy\OnPremDeploymentInfrastructure\onPremDeploy.ps1" 
-            Install-Service -DeployScriptPath $processingDeploy -WdpPackagePath $processingWdp -DatabaseConnectionString $dbConnectionString -LicenseXmlPath $txtLicenseFolderPath.Text -SiteFolderPath $txtSiteFolderPath.Text
+                -RootSitePath $txtSiteFolderPath.Text `
+                -RepoPath $PSScriptRoot
         })
 
     
     [void] $formUniversalLess.ShowDialog() 
+}
+
+function Install-UniversalTracker{
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$SqlServerName,
+
+        [Parameter(Mandatory = $true)]
+        [string]$SqlServerUser,
+
+        [Parameter(Mandatory = $true)]
+        [string]$SqlServerPassword,
+
+        [Parameter(Mandatory = $true)]
+        [string]$SqlDbName,
+
+        [Parameter(Mandatory = $true)]
+        [string]$LicensePath,
+
+        [Parameter(Mandatory = $true)]
+        [string]$RootSitePath,
+
+        [Parameter(Mandatory = $true)]
+        [string]$RepoPath,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Prefix
+        
+    )
+
+    # Unzip files from download
+    UnzipUniveralTrackerFiles -RepoPath $RepoPath
+          
+    Write-Host "Installing Universal Tracker..." -ForegroundColor Green
+    # Install Universal Tracker
+    Install-UniversalTrackerWebHost -SqlServerName $SqlServerName `
+        -SqlServerUser $SqlServerUser `
+        -SqlServerPassword $SqlServerPassword `
+        -SqlDbName $SqlDbName `
+        -LicensePath $LicensePath `
+        -RootSitePath $RootSitePath  `
+        -RepoPath $RepoPath `
+        -Prefix $Prefix
+
+
+    $dbConnectionString = "user id=$($SqlServerUser);password=$($SqlServerPassword);data source=$($SqlServerName);database=$($SqlDbName);ConnectRetryCount=5;ConnectRetryInterval=10;Connection Timeout=50;"
+
+    Write-Host "Installing Collection Service..." -ForegroundColor Green
+    # Install Collection Service
+    $collectionWdp = "$RepoPath\Sitecore.Tracking.Collection.Service.1.0.0-r00045.wdp.zip"
+    $collectionDeploy = "$RepoPath\Sitecore.Tracking.Collection.Service.1.0.0-r00045.deploy\OnPremDeploymentInfrastructure\onPremDeploy.ps1" 
+    
+    $AppName = "$Prefix.tracking.collection.service"
+    Install-Service -DeployScriptPath $collectionDeploy `
+                    -WdpPackagePath $collectionWdp `
+                    -DatabaseConnectionString $dbConnectionString `
+                    -LicenseXmlPath $LicensePath `
+                    -SiteFolderPath "$RootSitePath.$AppName" `
+                    -Prefix $Prefix `
+                    -AppName $AppName
+
+    Write-Host "Installing Processing Service..." -ForegroundColor Green
+    # Install Processing Service
+    $processingWdp = "$RepoPath\Sitecore.Tracking.Processing.Service.1.0.0-r00070.wdp.zip"
+    $processingDeploy = "$RepoPath\Sitecore.Tracking.Processing.Service.1.0.0-r00070.deploy\OnPremDeploymentInfrastructure\onPremDeploy.ps1" 
+    
+    $AppName = "$Prefix.tracking.processing.service"
+    Install-Service -DeployScriptPath $processingDeploy `
+                    -WdpPackagePath $processingWdp `
+                    -DatabaseConnectionString $dbConnectionString `
+                    -LicenseXmlPath $LicensePath `
+                    -SiteFolderPath "$RootSitePath.$AppName" `
+                    -Prefix $Prefix `
+                    -AppName $AppName
 }
 
 function Get-Folder($directory) {
@@ -223,7 +279,6 @@ function Get-Folder($directory) {
     }
     return $folder
 }
-
 
 function Unzip {
     param([string]$zipfile, [string]$outpath)
@@ -246,8 +301,16 @@ function Invoke-Command {
 }
 
 function UnzipUniveralTrackerFiles {
+    [CmdletBinding()]
+    param(
+
+        [Parameter(Mandatory = $true)]
+        [string]$RepoPath
+        
+    )
+
     Write-Host "Extracting files..." -ForegroundColor Green
-    $pathRoot = $PSScriptRoot
+    $pathRoot = $RepoPath
 
     # Extract 'Sitecore Universal Tracker 1.0.0.zip'
     Unzip "$pathRoot\Sitecore Universal Tracker 1.0.0.zip" "$pathRoot\" 
@@ -265,8 +328,7 @@ function UnzipUniveralTrackerFiles {
     Write-Host "Extraction complete!" -ForegroundColor Green
 }
 
-
-function Install-UniversalTracker {
+function Install-UniversalTrackerWebHost {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
@@ -285,14 +347,17 @@ function Install-UniversalTracker {
         [string]$LicensePath,
 
         [Parameter(Mandatory = $true)]
-        [string]$RootSitePath
+        [string]$RootSitePath,
+
+        [Parameter(Mandatory = $true)]
+        [string]$RepoPath
         
     )
 
     # Run onPremDeployfor
-    $sqlDeployPath = "$PSScriptRoot\Sitecore.Tracking.Sql.1.0.0-r00056.deploy\OnPremDeploymentInfrastructure\onPremDeploy.ps1"
+    $sqlDeployPath = "$RepoPath\Sitecore.Tracking.Sql.1.0.0-r00056.deploy\OnPremDeploymentInfrastructure\onPremDeploy.ps1"
     $sqlDeployArgumentList = @()
-    $sqlDeployArgumentList += ("-sourceDacFile", "$PSScriptRoot\Sitecore.Tracking.Sql.1.0.0-r00056.dacpac\Sitecore.Tracking.dacpac")
+    $sqlDeployArgumentList += ("-sourceDacFile", "$RepoPath\Sitecore.Tracking.Sql.1.0.0-r00056.dacpac\Sitecore.Tracking.dacpac")
     $sqlDeployArgumentList += ("-serverName", "$SqlServerName")
     $sqlDeployArgumentList += ("-dbName", "$SqlDbName")
     $sqlDeployArgumentList += ("-dbUser", "$SqlServerUser")
@@ -310,7 +375,6 @@ function Install-UniversalTracker {
     # Navigate to Bindings. Double-click on the port 443 binding and select the SSL certificate.
 }
 
-
 function Install-Service {
     [CmdletBinding()]
     param (
@@ -327,7 +391,13 @@ function Install-Service {
         [string]$LicenseXmlPath,
 
         [Parameter(Mandatory = $true)]
-        [string]$SiteFolderPath
+        [string]$SiteFolderPath,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Prefix,
+
+        [Parameter(Mandatory = $true)]
+        [string]$AppName
     )
 
     # Run onPremDeploy
@@ -337,6 +407,8 @@ function Install-Service {
     $installArgs += ("-licenseXmlPath", "$LicenseXmlPath\license.xml")
     $installArgs += ("-siteFolderPath", "$SiteFolderPath")
     $installArgs += ("-siteHttpPort", "80")
+    $installArgs += ("-instanceName", "$Prefix.Tracking.$AppName.Service")
+    $installArgs += ("-iisAppPollName", "$Prefix.Tracking.$AppName.Service")
   
     Write-Host "`"$DeployScriptPath`" $installArgs"  $DeployScriptPath -ForegroundColor Gray
 
@@ -345,12 +417,19 @@ function Install-Service {
     Invoke-Expression "& `"$DeployScriptPath`" $installArgs" | Out-Null
 }
 
-function CleanUp {    
-    Get-ChildItem -Path "$PSScriptRoot\" -File -Recurse |
+function CleanUp {  
+    [CmdletBinding()]
+    param(
+
+        [Parameter(Mandatory = $true)]
+        [string]$RepoPath
+        
+    )  
+    Get-ChildItem -Path "$RepoPath\" -File -Recurse |
     Where-Object { $_.Name -ne "Universal-Less.ps1" -and $_.Name -ne "Sitecore Universal Tracker 1.0.0.zip" } |
     Remove-Item
 
-    Get-ChildItem -Path "$PSScriptRoot\" -Directory -Recurse |
+    Get-ChildItem -Path "$RepoPath\" -Directory -Recurse |
     Where-Object { $_.Name -ne "Universal-Less.ps1" -and $_.Name -ne "Sitecore Universal Tracker 1.0.0.zip" } |
     Remove-Item -Recurse
 }
@@ -368,8 +447,24 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 # Start here by showing the dialog.
-Show-Dialog 
+#Show-Dialog 
 
+#Debug Mode
+$Prefix = "rosytaters"
+$SqlServerName = "localhost"
+$SqlDbName = "$Prefix.Tracker"
+$SqlUser = "sitecore"
+$SqlPassword = "s1t3c0r3"
+$LicensePath = "C:\license.xml"
+$RootSitePath = "C:\inetpub\wwwroot\$Prefix"
+
+Install-UniversalTracker -SqlServerName $SqlServerName `
+    -SqlDbName $SqlDbName `
+    -SqlServerUser $SqlUser `
+    -SqlServerPassword $SqlPassword `
+    -LicensePath $LicensePath `
+    -RootSitePath $RootSitePath `
+    -RepoPath $PSScriptRoot
 
 # Post deploy file clean-up
-CleanUp
+#CleanUp

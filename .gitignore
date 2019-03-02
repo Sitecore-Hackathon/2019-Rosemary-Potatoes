@@ -318,3 +318,15 @@ ASALocalRun/
 
 # MSBuild Binary and Structured Log
 *.binlog
+/lib/UniversalTracker/Sitecore.Tracking.Sql.1.0.0-r00056.deploy.zip
+/lib/UniversalTracker/Sitecore.Tracking.Sql.1.0.0-r00056.deploy
+/lib/UniversalTracker/Sitecore.Tracking.Sql.1.0.0-r00056.dacpac.zip
+/lib/UniversalTracker/Sitecore.Tracking.Sql.1.0.0-r00056.dacpac
+/lib/UniversalTracker/Sitecore.Tracking.Processing.Service.1.0.0-r00070.wdp.zip
+/lib/UniversalTracker/Sitecore.Tracking.Processing.Service.1.0.0-r00070.deploy.zip
+/lib/UniversalTracker/Sitecore.Tracking.Processing.Service.1.0.0-r00070.deploy
+/lib/UniversalTracker/Sitecore.Tracking.Collection.Service.1.0.0-r00045.wdp.zip
+/lib/UniversalTracker/Sitecore.Tracking.Collection.Service.1.0.0-r00045.deploy.zip
+/lib/UniversalTracker/Sitecore.Tracking.Collection.Service.1.0.0-r00045.deploy
+/lib/UniversalTracker/readme.md
+/lib/UniversalTracker/deployAllAzure.ps1
