@@ -226,15 +226,11 @@ function Install-UniversalTracker{
           
     Write-Host "Installing Universal Tracker..." -ForegroundColor Green
     # Install Universal Tracker
-    Install-UniversalTrackerWebHost -SqlServerName $SqlServerName `
+    Install-UniversalTrackerDb -SqlServerName $SqlServerName `
         -SqlServerUser $SqlServerUser `
         -SqlServerPassword $SqlServerPassword `
         -SqlDbName $SqlDbName `
-        -LicensePath $LicensePath `
-        -RootSitePath $RootSitePath  `
-        -RepoPath $RepoPath `
-        -Prefix $Prefix
-
+        -RepoPath $RepoPath 
 
     $dbConnectionString = "user id=$($SqlServerUser);password=$($SqlServerPassword);data source=$($SqlServerName);database=$($SqlDbName);ConnectRetryCount=5;ConnectRetryInterval=10;Connection Timeout=50;"
 
@@ -328,7 +324,7 @@ function UnzipUniveralTrackerFiles {
     Write-Host "Extraction complete!" -ForegroundColor Green
 }
 
-function Install-UniversalTrackerWebHost {
+function Install-UniversalTrackerDb {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
@@ -342,12 +338,6 @@ function Install-UniversalTrackerWebHost {
 
         [Parameter(Mandatory = $true)]
         [string]$SqlDbName,
-
-        [Parameter(Mandatory = $true)]
-        [string]$LicensePath,
-
-        [Parameter(Mandatory = $true)]
-        [string]$RootSitePath,
 
         [Parameter(Mandatory = $true)]
         [string]$RepoPath
@@ -456,7 +446,7 @@ $SqlDbName = "$Prefix.Tracker"
 $SqlUser = "sitecore"
 $SqlPassword = "s1t3c0r3"
 $LicensePath = "C:\license.xml"
-$RootSitePath = "C:\inetpub\wwwroot\$Prefix"
+$RootSitePath = "C:\inetpub\wwwroot\"
 
 Install-UniversalTracker -SqlServerName $SqlServerName `
     -SqlDbName $SqlDbName `
@@ -464,7 +454,8 @@ Install-UniversalTracker -SqlServerName $SqlServerName `
     -SqlServerPassword $SqlPassword `
     -LicensePath $LicensePath `
     -RootSitePath $RootSitePath `
-    -RepoPath $PSScriptRoot
+    -RepoPath $PSScriptRoot `
+    -Prefix $Prefix
 
 # Post deploy file clean-up
 #CleanUp
