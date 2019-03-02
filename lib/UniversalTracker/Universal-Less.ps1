@@ -284,6 +284,12 @@ function Install-UniversalTracker {
         -Prefix $Prefix `
         -AppName $AppName `
         -LogName "log_processing"
+
+     UpdateTrackingServiceConfigs -Prefix $Prefix -xconnectInstance $xconnectInstance
+
+     ApplyPermissionsToPrivateKey
+
+     Open-StatusPages
 }
 
 function Get-Folder($directory) {
@@ -462,6 +468,73 @@ function Install-Service {
     Add-HostEntry $AppName
 }
 
+function UpdateTrackingServiceConfigs {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$Prefix,
+
+        [Parameter(Mandatory = $true)]
+        [string]$xconnectInstance
+        
+    )
+    
+    # Get the config.xml file
+    $file = "C:\inetpub\wwwroot\$($Prefix).tracking.processing.service\sitecore\Sitecore.Tracking.Processing.Engine\Config\config.xml"
+
+    $xml = [xml](Get-Content $file)
+    $xml.SelectNodes("//ServiceUrl") | % { 
+        $_."#text" = $_."#text".Replace("xconnect.service", $xconnectInstance) 
+        }
+
+    $xml.SelectNodes("//ClientCertificate") | % { 
+        $_."#text" = $_."#text".Replace("StoreName=My;StoreLocation=CurrentUser;AllowInvalidClientCertificates=true;FindType=FindByThumbprint;FindValue=", "StoreName=My;StoreLocation=LocalMachine;AllowInvalidClientCertificates=true;FindType=FindBySubjectName;FindValue=$xconnectInstance") 
+        }
+
+    $xml.Save("C:\inetpub\wwwroot\$($Prefix).tracking.processing.service\sitecore\Sitecore.Tracking.Processing.Engine\Config\config.xml")
+
+}
+
+function Open-StatusPages {
+    start "https://$Prefix.tracking.collection.service/status"
+    start "https://$Prefix.tracking.processing.service/status"
+}
+
+
+function ApplyPermissionsToPrivateKey {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$xconnectInstance
+    )
+
+    Import-Module webadministration
+
+    $certCN = $xconnectInstance
+    Try {
+        $WorkingCert = Get-ChildItem CERT:\LocalMachine\My |where {$_.Subject -match $certCN} | sort $_.NotAfter -Descending | select -first 1 -erroraction STOP
+        $TPrint = $WorkingCert.Thumbprint
+        $rsaFile = $WorkingCert.PrivateKey.CspKeyContainerInfo.UniqueKeyContainerName
+    }
+    Catch {
+        "Error: unable to locate certificate for $($CertCN)"
+    }
+    $keyPath = "C:\ProgramData\Microsoft\Crypto\RSA\MachineKeys\"
+    $fullPath = $keyPath + $rsaFile
+    $acl = Get-Acl -Path $fullPath
+    $permission = "NETWORK SERVICE", "Read", "Allow"
+    $accessRule = new-object System.Security.AccessControl.FileSystemAccessRule $permission
+    $acl.AddAccessRule($accessRule)
+    Try {
+        Set-Acl $fullPath $acl
+        "Success: ACL set on certificate"
+    }
+    Catch {
+        "Error: unable to set ACL on certificate"
+    }
+
+}
+
 function Add-HostEntry {
     [CmdletBinding()]
     param (
@@ -542,27 +615,8 @@ if ($debug) {
 }
 else {
     # Start here by showing the dialog.
-    
     Show-Dialog 
 }
-
-
-# Update with xConnect URL in config
-# 2. Update the processing service configuration under inetpub\wwwroot\xxx.tracking.processing.service\sitecore\Sitecore.Tracking.Processing.Engine\Config\config.xml
-
-
-# 3. Change the Settings/XConnect/ServiceUrl node to the correct xConnect service path
-# 4. Replace the Settings/XConnect/ClientCertificate node text with StoreName=My;StoreLocation=LocalMachine;AllowInvalidClientCertificates=true;FindType=FindBySubjectName;FindValue=$xConnectHostName
-# 5. Update the xConnect private key permissions so that Network Service has read permissions
-
-
-# Get and update thumbprint 
-
-
-
-# invoke status page for 200
-
-
 
 # Post deploy file clean-up
 CleanUp -RepoPath $PSScriptRoot
