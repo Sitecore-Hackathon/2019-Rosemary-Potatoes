@@ -51,6 +51,10 @@
 param (
     [Parameter(Mandatory = $True)]
     [string]
+    $SqlServer,
+
+    [Parameter(Mandatory = $True)]
+    [string]
     $dbName,
 
     [Parameter(Mandatory = $True)]
@@ -137,10 +141,10 @@ function Remove-Database(){
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
-        [string]$dbName,
+        [string]$SqlServer,
 
         [Parameter(Mandatory = $true)]
-        [string]$SqlServer,
+        [string]$dbName,
 
         [Parameter(Mandatory = $true)]
         [string]$SqlAdminUser,
@@ -150,7 +154,7 @@ function Remove-Database(){
     )
 
     Write-Host "Removing Database '$dbName'"
-    Invoke-SQLCmd -ServerInstance $SqlServer -U $SqlAdminUser -P $SqlAdminPassword -Query "IF EXISTS(SELECT * FROM sys.databases WHERe NAME = '${prefix}_$dbName') BEGIN ALTER DATABASE [${prefix}_$dbName] SET SINGLE_USER WITH ROllBACK IMMEDIATE; DROP DATABASE [${prefix}_$dbName];END"
+    Invoke-SQLCmd -ServerInstance $SqlServer -U $SqlAdminUser -P $SqlAdminPassword -Query "IF EXISTS(SELECT * FROM sys.databases WHERe NAME = '$dbName') BEGIN ALTER DATABASE [$dbName] SET SINGLE_USER WITH ROllBACK IMMEDIATE; DROP DATABASE [$dbName];END"
 }
 
 <#
@@ -163,7 +167,7 @@ function Remove-Database(){
 .PARAMETER appPool
     Name of the site's app pool.
 #>
-function Remove-Website(){
+function Delete-Website{
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
@@ -279,7 +283,7 @@ try
     Write-Host "Removing the Processing Service..."
 
     Write-Host "Removing the website..."
-    Remove-Website($processingServiceSiteName, $processingServiceAppPoolName)
+    Delete-Website -site $processingServiceSiteName -appPool $processingServiceAppPoolName
 
     Write-Host "Removing the windows service..."
     Remove-Service($processingServiceName)
@@ -298,7 +302,7 @@ try {
     Write-Host "Removing the Collection Service..."
 
     Write-Host "Removing the website..."
-    Remove-Website($collectionServiceSiteName, $collectionServiceAppPoolName)
+    Delete-Website -site $collectionServiceSiteName -appPool $collectionServiceAppPoolName
 
     Write-Host "Removing the hosts file entry..."
     Remove-HostsFileEntry($collectionServiceSiteName)
@@ -321,7 +325,7 @@ catch {
 
 try {
     Write-Host "Removing the Universal Tracker Database..."
-    Remove-Database($dbName, $dbUser, $dbPassword)
+    Remove-Database -SqlServer $SqlServer -dbName $dbName -SqlAdminUser $dbUser -SqlAdminPassword $dbPassword
 
     Write-Host "Universal Tracker Database removed!"
 }
