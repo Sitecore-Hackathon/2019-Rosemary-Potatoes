@@ -16,10 +16,11 @@ It's a pretty sweet tool, but the installation process is what you might expect 
 
 We're glad you asked! First things first: you'll need the package of Sitecore Universal Tracker packages from the [Sitecore downloads site](https://dev.sitecore.net/Downloads/Sitecore_Universal_Tracker/1x/Sitecore_Universal_Tracker_100.aspx) (grab the installation PDF while you're there; even though Universal-Less handles the installation process, the doc includes some valuable information about Universal Tracker). 
 
-**This is important:** place the "Sitecore Universal Tracker 1.X.X.zip" file in a folder where the _path has no spaces_. You don't need to extract the files; Universal-Less will take care of that.
+**This is important:** place the `Sitecore Universal Tracker 1.X.X.zip` file in a folder where the _path has no spaces_. You don't need to extract the files; Universal-Less will take care of that.
 
 Once you have the package of packages, you'll need to make sure you have the following software products installed:
 
+* Sitecore 9.1 installation
 * Windows 10 or Windows Server 2016
 * IIS 10. (For further information, see the [recommendation from Microsoft](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?view=aspnetcore-2.0&amp;amp;tabs=aspnetcore2x))
 * .Net 4.7.1 and later
@@ -34,9 +35,9 @@ Once you've got this all set, you're ready to rock with Universal-Less!
 
 ***[INSERT SITECORE PACKAGE INSTRUCTIONS HERE]***
 
-Grab the "Universal-Less.ps1" script from the ***[LOCATION FROM ABOVE]*** and place it in the folder with the "Sitecore Universal Tracker 1.X.X.zip" file. 
+Grab the `Universal-Less.ps1` script from the ***[LOCATION FROM ABOVE]*** and place it in the folder with the `Sitecore Universal Tracker 1.X.X.zip` file. 
 
-Open an administrator Powershell terminal in that folder, and execute the "Universal-Less.ps1" script. You'll see a Universal-Less window appear:
+Open an administrator Powershell terminal in that folder, and execute the `Universal-Less.ps1` script. You'll see a Universal-Less window appear:
 
 ![the UI](documentation/images/universal-less-ui.jpg?raw=true "The UI")
 
@@ -57,6 +58,22 @@ Then click "Install Universal Tracker". The Powershell script will open other Po
 
 Azure is pretty sweet, [no doubt](https://www.youtube.com/watch?v=TR3Vdo5etCQ&t=30s), but sometimes you just want to spin up something immediately and locally without having to check to see if you have enough Azure credits to afford the necessary resources. And sometimes you'll be offline or [Azure South Central](https://www.theregister.co.uk/2018/09/17/azure_outage_report/) is blowing up again and you can't reach Azure. 
 
+## This is for dev machines, yes? What about cleaning up old Universal Tracker installations?
+
+We got you covered. Universal-Less comes bundled with an uninstallation script (a "Un-Universal-Less" script, if you will). This script, `Universal-Less-Uninstall.ps1`, can be run with command-line arguments and can uninstall the entirety of any existing Universal Tracker installation, whether installed by Universal-Less or not. 
+
+* dbName: name of the database
+* dbUser: database user with permission to delete the database
+* dbPassword: password for the database user
+* collectionServiceSiteName: name of the collection service site
+* collectionServiceAppPoolName: name of the collection service app pool
+* collectionServicesiteFolderPath: name of the root path of the collection service site
+* processingServiceSiteName: name of the processing service site
+* processingServiceAppPoolName: name of the processing service app pool
+* processingServicesiteFolderPath: name of the root path of the processing service site
+* processingServiceName: name of the processing Windows service
+* collectionServiceCertificateSubjectName: (optional) subject name of the certificate to remove
+
 ## I am very interested. Where can I learn more?
 
 Check out our [documentation here](documentation) to learn more. 
@@ -68,7 +85,7 @@ We're Team Rosemary Potatoes: [Chet Potvin](https://twitter.com/ChetPotvin), [Ga
 ## Gee, I'd really like to actually see and hear from you.
 
 Well then, check out our YouTube video all about Universal-Less!
-[![Sitecore Hackathon Video Embedding Alt Text](https://img.youtube.com/vi/4VBWLeVsnBU/0.jpg)](https://www.youtube.com/watch?v=4VBWLeVsnBU)
+[![Sitecore Hackathon Video Embedding Alt Text](https://img.youtube.com/vi/yH9YM9RLFr4/0.jpg)](https://youtu.be/yH9YM9RLFr4)
 
 ## Why "Rosemary Potatoes"?
 
