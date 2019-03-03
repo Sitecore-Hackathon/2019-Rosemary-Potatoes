@@ -50,7 +50,9 @@ Universal-Less requires no configuration beyond the simple UI that appears when 
 
 You can use Universal-Less as described on the main readme and repeated here:
 
-Grab the `Universal-Less.ps1` script from the ***[LOCATION FROM ABOVE]*** and place it in the folder with the `Sitecore Universal Tracker 1.X.X.zip` file. 
+Install the [RosyTaters-UniversalLess-1.0.zip](https://github.com/Sitecore-Hackathon/2019-Rosemary-Potatoes/blob/master/sc.package/RosyTaters-UniversalLess-1.0.zip) package into your Sitecore solution.
+
+Grab the `Universal-Less.ps1` script from the App_Data of your site and place it in the folder with the `Sitecore Universal Tracker 1.X.X.zip` file. 
 
 Open an administrator Powershell terminal in that folder, and execute the `Universal-Less.ps1` script. You'll see a Universal-Less window appear:
 
