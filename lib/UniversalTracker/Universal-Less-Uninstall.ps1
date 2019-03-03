@@ -16,37 +16,37 @@
     ~~ TEAM ROSEMARY POTATOES ~~
 
 .PARAMETER dbName
-   IIS website binding for https port
+   name of the database
 
 .PARAMETER dbUser
-   IIS website binding for https port
+   database user with permission to delete the database
 
 .PARAMETER dbPassword
-   IIS website binding for https port
+   password for the database user
 
 .PARAMETER collectionServiceSiteName
-   IIS website binding for https port
+   name of the collection service site
 
 .PARAMETER collectionServiceAppPoolName
-   IIS website binding for https port
+   name of the collection service app pool
    
 .PARAMETER collectionServicesiteFolderPath
-   IIS website binding for https port
+   name of the root path of the collection service site
 
 .PARAMETER processingServiceSiteName
-   IIS website binding for https port
+   name of the processing service site
 
 .PARAMETER processingServiceAppPoolName
-   IIS website binding for https port
+   name of the processing service app pool
 
 .PARAMETER processingServicesiteFolderPath
-   IIS website binding for https port
+   name of the root path of the processing service site
 
 .PARAMETER processingServiceName
-   IIS website binding for https port
+   name of the processing Windows service
 
 .PARAMETER collectionServiceCertificateSubjectName
-   IIS website binding for https port   
+   (optional) subject name of the certificate to remove
 #>
 param (
     [Parameter(Mandatory = $True)]
@@ -72,7 +72,7 @@ param (
     $collectionServiceAppPoolName = "Sitecore.Tracking.Collection.Service",
 
     [string]
-    $collectionServicesiteFolderPath = "C:\inetpub\wwwroot",
+    $collectionServicesiteFolderPath = "",
 
     [string]
     $processingServiceSiteName = "Sitecore.Tracking.Processing.Service",
@@ -81,7 +81,7 @@ param (
     $processingServiceAppPoolName = "Sitecore.Tracking.Processing.Service",
 
     [string]
-    $processingServicesiteFolderPath = "C:\inetpub\wwwroot",
+    $processingServicesiteFolderPath = "",
 
     [string]
     $processingServiceName = "Sitecore Universal Tracker Processing Service",
@@ -272,10 +272,12 @@ function Remove-CertificateByThumbprint(){
 # Remove items in reverse order of their being added:
 # - Processing Service
 #   - website and app pool
+#   - remove folder
 #   - windows service
 #   - hosts file entry
 # - Collection Service
 #   - website and app pool
+#   - remove folder
 #   - windows service
 # - SQL Database
 try 
@@ -284,6 +286,9 @@ try
 
     Write-Host "Removing the website..."
     Delete-Website -site $processingServiceSiteName -appPool $processingServiceAppPoolName
+    
+    Write-Host "Removing the folder..."
+    Remove-Folder -path "$processingServicesiteFolderPath"
 
     Write-Host "Removing the windows service..."
     Remove-Service($processingServiceName)
@@ -303,6 +308,9 @@ try {
 
     Write-Host "Removing the website..."
     Delete-Website -site $collectionServiceSiteName -appPool $collectionServiceAppPoolName
+
+    Write-Host "Removing the folder..."
+    Remove-Folder -path "$collectionServicesiteFolderPath"
 
     Write-Host "Removing the hosts file entry..."
     Remove-HostsFileEntry($collectionServiceSiteName)
