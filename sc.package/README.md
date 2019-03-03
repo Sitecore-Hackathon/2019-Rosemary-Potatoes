@@ -1,4 +1,2 @@
 # Package
-Please include a .zip or .update file which will allow the module to be installed into a clean version of Sitecore.
-
-If there are any post-install steps required then please include it in the documentation. Remember, packages can include files and DLLs using the *Files dynamically* or *Files statically* option in the **Package Designer**.
+Download the [RosyTaters-UniversalLess-1.0.zip](https://github.com/Sitecore-Hackathon/2019-Rosemary-Potatoes/blob/master/sc.package/RosyTaters-UniversalLess-1.0.zip) and follow the instructions in the documentation.
